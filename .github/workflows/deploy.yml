@@ -1,0 +1,36 @@
+name: CI/CD for Portfolio
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'  # Use a version suitable for your project
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build the project
+      run: npm run build  # Adjust based on your project
+
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        branch: gh-pages
+        folder: dist  # Adjust based on your project’s build output directory
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Notify deployment success
+      run: echo "Portfolio deployed successfully!"
